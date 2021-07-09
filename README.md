@@ -1,27 +1,76 @@
-# YuuvisOidcClient
+# Building a custom client using OpenID connect
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 12.0.5.
+Notice: This application is reliant on a beta version of `@yuuvis/framework`. Feature is available since version `2.1.0-beta.6`.
 
-## Development server
+This project will demonstrate how to create a custom client using the `@yuuvis/framework` library that connects to the backend using OpenID Connect:
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+## Create and setup project
 
-## Code scaffolding
+- Create a new project using Angular CLI running `ng new yuuvis-oidc-client`. 
+- Run `npm i -S @yuuvis/framework` to add the yuuvis framework dependency.  
+- Add build config to `angular.json` to copy translations from yuuvis framework:
+```json
+// line: 32
+{
+    "glob": "**/*",
+    "input": "node_modules/@yuuvis/framework/i18n",
+    "output": "./assets/@yuuvis/i18n/"
+}
+```
+- Import `YuvFrameworkModule`:
+```ts
+// app.module.ts
+...
+imports: [
+    ...,
+    YuvFrameworkModule.forRoot({translations: ['assets/default/i18n/', 'assets/@yuuvis/i18n/']}),
+    ...
+],
+  ...
+```
+- Add yuuvis framework styles to projects `styles.scss`:
+```scss
+// styles.scss
+@import "~@yuuvis/framework/framework.css";
+```
+- Setup configuration and translations (take a look at the assets folder. The `default` directory will contain the required `main.json` as well as a folder for translations)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Prepare Keycloak
+For connecting to a certain tenant we need to configure a client in the corresponding Keycloak realm: You can import `doc/spa-client.json` into your realm. Make sure to configure the clients `Redirect URIs` to match your environment.
 
-## Build
+## Connect to the backend
+The default behaviour of the `@yuuvis/core` library (which is the foundation of `@yuuvis/framework`) is to directly try to connect to the backend. This will fail in the first place so you'll see a couple of error messages in the console. But that's fine.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+To dynamically setup a connection using OpenID Connect you just need to set the OpenID configuration and then initialize the core again:
 
-## Running unit tests
+```ts
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+constructor(
+    @Inject(CORE_CONFIG) private coreConfig: CoreConfig,
+    private coreInit: CoreInit
+  ) {}
 
-## Running end-to-end tests
+connect() {
+    this.coreConfig.oidc = {
+      host: '...',
+      tenant: '...',
+      issuer: '...',
+      clientId: '...',
+    };
+    this.coreInit.initialize();
+}
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+```
 
-## Further help
+If you take a look at `app.component.ts` it should be obvious how you could extend this in a way that fits your needs. To disconnect from the backend run logout function provided by the `UserService`:
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```ts
+
+constructor(private userService: UserService) {}
+
+logout() {
+    this.userService.logout();
+}
+
+```
+

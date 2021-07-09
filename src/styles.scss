@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+@import "~@yuuvis/framework/framework.css";
+
+:root {
+
+    --color-accent-rgb: 127,172, 65
+}
+
+html {
+    background-image: url('assets/bg.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+h1 {
+    font-weight: var(--font-weight-light);
+    font-size: var(--font-display);
+}

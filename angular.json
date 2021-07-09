@@ -28,7 +28,12 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/@yuuvis/framework/i18n",
+                "output": "./assets/@yuuvis/i18n/"
+              }
             ],
             "styles": [
               "src/styles.scss"
