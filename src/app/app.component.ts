@@ -21,7 +21,7 @@ export class AppComponent {
     {
       host: 'https://kolibri.enaioci.net',
       tenant: 'kolibri',
-      issuer: 'https://auth.enaioci.net/auth/realms/kolibri',
+      issuer: 'https://kc001.auth.enaioci.net/auth/realms/kolibri',
       clientId: 'spa-client',
     },
   ];
