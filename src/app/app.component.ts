@@ -17,6 +17,8 @@ import {
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
+  static OIDC = 'app.oidc.config';
+
   targetHosts: OpenIdConfig[] = [
     {
       host: 'https://kolibri.enaioci.net',
@@ -48,6 +50,7 @@ export class AppComponent {
     this.coreConfig.oidc = {
       ...target
     };
+    localStorage.setItem(AppComponent.OIDC, JSON.stringify(this.coreConfig.oidc));
     this.coreInit.initialize();
   }
 
@@ -70,7 +73,8 @@ export class AppComponent {
     this.result = [];
   }
 
-  logout() {
+  logout(removeOIDC = false) {
+    removeOIDC && localStorage.removeItem(AppComponent.OIDC);
     this.userService.logout();
   }
 }

@@ -10,7 +10,11 @@
 
 <ng-container *ngIf="user; else tplLogin">
   <header>
-    <ng-container><button (click)="logout()">Logout</button></ng-container>
+    <ng-container>
+      <button *ngIf="selected" (click)="selected = undefined" class="back">&laquo;</button>
+      <button (click)="logout(true)">Hard Logout</button>
+      <button (click)="logout(false)">Logout</button>
+    </ng-container>
   </header>
 
   <main>
@@ -27,7 +31,6 @@
     <div class="details" *ngIf="selected">
       <yuv-object-details [objectId]="selected.id">
       </yuv-object-details>
-      <button (click)="selected = undefined">X</button>
     </div>
 
   </main>

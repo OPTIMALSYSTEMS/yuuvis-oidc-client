@@ -15,6 +15,13 @@
         justify-content: flex-end;
         align-items: center;
         padding: 8px;
+        
+        button.back {
+            flex: 1 1 0%;
+            font-size: 32px;
+            padding: 0 14px;
+            line-height: 28px;
+        }
     }
     main {
         grid-area: main;
