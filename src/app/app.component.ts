@@ -24,6 +24,12 @@ export class AppComponent {
       issuer: 'https://kc001.auth.enaioci.net/auth/realms/kolibri',
       clientId: 'spa-client',
     },
+    {
+      host: 'https://eu.yuuvis.io',
+      tenant: 'itelligence1',
+      issuer: 'https://auth.eu.yuuvis.io/auth/realms/itelligence1',
+      clientId: 'spa-client',
+    },
   ];
   user: YuvUser | undefined;
   result: { id: string, title: string; description: string }[] = [];
@@ -40,8 +46,7 @@ export class AppComponent {
 
   login(target: OpenIdConfig) {
     this.coreConfig.oidc = {
-      ...target,
-      postLogoutRedirectUri: window.location.origin,
+      ...target
     };
     this.coreInit.initialize();
   }

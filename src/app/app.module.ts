@@ -13,7 +13,13 @@ import { AppComponent } from './app.component';
     BrowserModule,
     AppRoutingModule,
     YuvFrameworkModule.forRoot({
-      translations: ['assets/default/i18n/', 'assets/@yuuvis/i18n/']}),
+      // oidc: {
+      //   host: 'https://kolibri.enaioci.net',
+      //   tenant: 'kolibri',
+      //   issuer: 'https://kc001.auth.enaioci.net/auth/realms/kolibri',
+      //   clientId: 'spa-client',
+      // },
+      translations: ['assets/default/i18n/', 'assets/@yuuvis/i18n/']})
   ],
   providers: [],
   bootstrap: [AppComponent]
