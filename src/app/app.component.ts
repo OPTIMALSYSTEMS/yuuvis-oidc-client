@@ -4,12 +4,19 @@ import {
   CoreConfig,
   CoreInit,
   CORE_CONFIG,
+  OidcService,
   OpenIdConfig,
   SearchQuery,
   SearchService,
   UserService,
   YuvUser,
 } from '@yuuvis/framework';
+
+/** use whoami service for summer2021 */
+const setupCookie = OidcService.prototype.setupCookie;
+OidcService.prototype.setupCookie = function (viewer, path, headers) {
+  return setupCookie.call(this, viewer, path.replace(/api\/.*/, 'api/users/whoami'), headers);
+};
 
 @Component({
   selector: 'app-root',
@@ -30,7 +37,7 @@ export class AppComponent {
       host: 'https://eu.yuuvis.io',
       tenant: 'itelligence1',
       issuer: 'https://auth.eu.yuuvis.io/auth/realms/itelligence1',
-      clientId: 'spa-client',
+      clientId: 'it-archive'
     },
   ];
   user: YuvUser | undefined;
