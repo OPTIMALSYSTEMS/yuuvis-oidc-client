@@ -4,6 +4,7 @@ import {
   CoreConfig,
   CoreInit,
   CORE_CONFIG,
+  DmsService,
   OidcService,
   OpenIdConfig,
   SearchQuery,
@@ -17,6 +18,12 @@ const setupCookie = OidcService.prototype.setupCookie;
 OidcService.prototype.setupCookie = function (viewer, path, headers) {
   return setupCookie.call(this, viewer, path.replace(/api\/.*/, 'api/users/whoami'), headers);
 };
+
+/** allows multi-download */
+const downloadContent = DmsService.prototype.downloadContent;
+DmsService.prototype.downloadContent = function(objects: {id: string, version?: number}[], withVersion?: boolean) {
+  return objects.forEach((o, i) => setTimeout(() => downloadContent.call(this, [o] as any[], withVersion), i * 200));
+}
 
 @Component({
   selector: 'app-root',
@@ -37,7 +44,13 @@ export class AppComponent {
       host: 'https://eu.yuuvis.io',
       tenant: 'itelligence1',
       issuer: 'https://auth.eu.yuuvis.io/auth/realms/itelligence1',
-      clientId: 'it-archive'
+      clientId: 'it-archive-client'
+    },
+    {
+      host: 'https://eu.yuuvis.io',
+      tenant: 'kyoto',
+      issuer: 'https://auth.eu.yuuvis.io/auth/realms/kyoto',
+      clientId: 'spa-client'
     },
   ];
   user: YuvUser | undefined;
